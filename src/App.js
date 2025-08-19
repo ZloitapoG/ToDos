@@ -5,6 +5,7 @@ import initialTodos from './todos';
 import { Outlet, NavLink } from "react-router-dom";
 
 export default function App() {
+  const [showMenu, setShowMenu] = useState(false);
   const [todos, setTodos] = useState(initialTodos)
   const del = key => {
     const newTodos = todos.filter(current => current.key !== key);
@@ -20,6 +21,10 @@ export default function App() {
     if (deed) deed.done = true;
     setTodos(newTodos);
   };
+  const handleBurgerClick = evt => {
+    evt.preventDefault();
+    setShowMenu(!showMenu);
+  }
   return (
     <div className="container">
       <nav className="navbar is-light">
@@ -27,34 +32,42 @@ export default function App() {
           {/*<span className="navbar-item is-uppercase">
             ToDos-1
           </span>*/}
-          <NavLink 
-              to="/"
-              className={({isActive})=> 
-                'navbar-item is-uppercase' + 
-                (isActive ? ' is-active': '')
-              }>
-                Делишки
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              'navbar-item is-uppercase' +
+              (isActive ? ' is-active' : '')
+            }>
+            Делишки
           </NavLink>
+          <a href="/"
+            className={showMenu ? 'navbar-burger is-active' : 'navbar-burger'}
+            onClick={handleBurgerClick}
+           >
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </a>
         </div>
-        <div className="navbar-menu">
+        <div className={showMenu? 'navbar-menu is-active' : 'navbar-menu'}
+              onClick={handleBurgerClick}
+        >
           <div className="navbar-start">
-              <NavLink
-                to = "/add"
-                className = {({isActive})=>
-                  'navbar-item' + 
-                  (isActive ? ' is-active' : '')
-                }
-                >
-                  Создать дельце
-              </NavLink>
+            <NavLink
+              to="/add"
+              className={({ isActive }) =>
+                'navbar-item' +
+                (isActive ? ' is-active' : '')
+              }
+            >
+              Создать дельце
+            </NavLink>
           </div>
         </div>
       </nav>
       <main className="content px-6 py-6">
-        {/*<h1>Todos</h1>*/}
-        {/*<TodoList list={todos} setDone={setDone} del={del} />
-        <TodoAdd add = {add}/>*/}
-        <Outlet/>
+        <Outlet />
       </main>
     </div>
   );
